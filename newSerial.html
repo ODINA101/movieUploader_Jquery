@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="./newserial.css">
+</head>
+<body>
+    
+ 
+
+
+name: <input type="text" id="name"/> <br><br>
+photo : <input type="text" id="photo"/><br><br>
+des: <input type="text" id="des"/><br><br>
+<button onclick="upload()">upload serie</button>
+
+<center>EnterName: <input type="text"   id="searchTXT"/><br><br>
+
+    <button onclick="search()" >search</button>
+    <button onclick="nseason()">add new season</button>
+    
+<div id="data">
+
+</div>
+</center>
+<div class="uploadWindow"><br><br>
+    sd <input type="text" id="sd"/> 
+<button id="upserie" onclick="upserie()">upload new serie</button>
+
+
+</div>
+<!-- sd : <input type="text" id="sd"/><br><br>
+hd : <input type="text" id="hd"/><br><br> -->
+</body>
+</html>
+
+<script src="https://www.gstatic.com/firebasejs/4.8.1/firebase.js"></script>
+<script>
+
+      var config = {
+    apiKey: "AIzaSyCp9QI_mUB7OHDw_glk56IUIwhoV_UR6lM",
+    authDomain: "movies-7b17f.firebaseapp.com",
+    databaseURL: "https://movies-7b17f.firebaseio.com",
+    projectId: "movies-7b17f",
+    storageBucket: "movies-7b17f.appspot.com",
+    messagingSenderId: "439505540900"
+  };
+  firebase.initializeApp(config);
+
+var serieRef;
+var serieValue;
+var seriesNumber;
+function upload() {
+    console.log("button works")
+    var ref = firebase.database().ref("series/");
+
+
+ref.push({
+    name:document.querySelector("#name").value,
+    photo:document.querySelector("#photo").value,
+    des:document.querySelector("#des").value,
+    
+    
+})
+
+
+
+
+
+}
+
+function nseason() {
+    var sn = prompt("season number", "for example 1");
+    var se = prompt("first serie", "for example http://31.146.20.4/data7/bef4b5/1000035/1000035_01_01_Georgian_300.mp4");
+
+    var sd = document.querySelector("#sd");
+ console.log(serieRef);
+   firebase.database().ref().child("series").child(serieRef).child("parts").child("სეზონი " + sn).push({
+     sd:se
+ })
+}
+
+function upserie() {
+  
+var sd = document.querySelector("#sd").value;
+var uploadWindow = document.querySelector(".uploadWindow");
+  firebase.database().ref().child("series").child(serieRef).child("parts").child(serieValue).push({
+ sd:sd
+     
+ })
+
+console.log("new serie has uploaded");
+document.querySelector("#sd").value = null;
+
+uploadWindow.style.display = "none";
+
+}
+function search() {
+
+var srch = document.querySelector("#searchTXT").value;
+
+    firebase.database().ref().child("series").orderByChild("name").equalTo(srch).on("value",(snps)=>{
+        document.querySelector("#data").innerHTML = null;
+console.log(snps.getRef());
+      snps.forEach((data)=>{
+         // console.log(data.numChildren()) //key of serie
+          console.log(data);
+serieRef = data.key;
+console.log(serieRef);
+console.log(serieRef);
+
+console.log(serieRef);
+console.log(serieRef);
+console.log(serieRef);
+console.log(serieRef);
+
+  if(data.val().parts) {
+          //console.log(Object.keys(data.val().parts).length);
+          for(var i=0;i<(Object.keys(data.val().parts).length);i++) {
+               console.log(i);
+              var button = document.createElement("button")
+              button.value = Object.keys(data.val().parts)[i];
+              var t = document.createTextNode(Object.keys(data.val().parts)[i]);
+              button.appendChild(t);
+ 
+ 
+
+              document.querySelector("#data").appendChild(button);
+
+              button.addEventListener("click",(e)=>{
+                  
+                  
+                  document.querySelector(".uploadWindow").style.display = "block";              
+              
+                  serieValue = e.target.value;
+                  serieRef = data.key;
+                  console.log(serieRef);
+                  console.log(serieRef);
+
+                  console.log(serieRef);
+                  
+              });
+          }
+
+        }
+
+
+
+          
+      });
+
+/////////////serieRef = data.key;//serieRef = data.key;
+    })
+}
+</script>

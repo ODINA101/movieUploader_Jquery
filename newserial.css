@@ -1,0 +1,12 @@
+.uploadWindow {
+display:none;
+
+position: relative;
+
+background: black;
+width:400px;
+height:200px;
+padding:5vh;
+color:#FFF;
+margin:auto;
+}
